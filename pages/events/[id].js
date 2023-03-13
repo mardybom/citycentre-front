@@ -6,6 +6,8 @@ import Layout from '../../components/layout';
 import Date from '../../components/date';
 import { getEvent, joinEvent } from '../../lib/events';
 import { AuthContext } from '../../context/auth-context';
+import EditEventModal from '../../components/events/editEventModal';
+import ErrorModal from '../../components/errorModal';
 
 const Event = () => {
   const authContext = useContext(AuthContext);
@@ -17,9 +19,14 @@ const Event = () => {
   // event detail
   const [isLoading, setIsLoading] = useState(false);
   const [event, setEvent] = useState();
+  const [isOrganizer, setIsOrganizer] = useState(false);
+
+  // edit event
+  const [editEventModal, setEditEventModal] = useState(false);
 
   // error
   const [error, setError] = useState();
+  const [errorModal, setErrorModal] = useState(false);
 
   const refresh = async (id) => {
     // in useRouter, dynamic route is an empty object during prerendering
@@ -29,6 +36,10 @@ const Event = () => {
       try {
         const event = await getEvent(id);
         setEvent(event);
+        setIsOrganizer(
+          event?.organizer?.username ===
+            authContext.authState.currentUser?.username
+        );
         setError(null);
       } catch (error) {
         setError({ title: 'Error getting event', message: error.message });
@@ -50,6 +61,9 @@ const Event = () => {
           <h1 className="h2">Events</h1>
           <div className="btn-toolbar mb-2 mb-md-0">
             <div className="btn-group me-2">
+              <Button outline size="sm" disabled>
+                Edit
+              </Button>
               <Button outline size="sm" disabled>
                 Refresh
               </Button>
@@ -76,6 +90,9 @@ const Event = () => {
           <h1 className="h2">Events</h1>
           <div className="btn-toolbar mb-2 mb-md-0">
             <div className="btn-group me-2">
+              <Button outline size="sm" disabled>
+                Edit
+              </Button>
               <Button
                 outline
                 size="sm"
@@ -96,8 +113,12 @@ const Event = () => {
           </Breadcrumb>
         </div>
         <div>
-          <h6>{error.title}</h6>
-          <p>{error.message}</p>
+          <ErrorModal
+            error={error}
+            errorModal={errorModal}
+            setErrorModal={setErrorModal}
+            refresh={refresh}
+          />
         </div>
       </Layout>
     );
@@ -108,6 +129,16 @@ const Event = () => {
         <h1 className="h2">Events</h1>
         <div className="btn-toolbar mb-2 mb-md-0">
           <div className="btn-group me-2">
+            <Button
+              outline
+              size="sm"
+              disabled={!isOrganizer}
+              onClick={() => {
+                setEditEventModal(true);
+              }}
+            >
+              Edit
+            </Button>
             <Button
               outline
               size="sm"
@@ -130,6 +161,18 @@ const Event = () => {
           </BreadcrumbItem>
         </Breadcrumb>
       </div>
+
+      <div>
+        <EditEventModal
+          editEventModal={editEventModal}
+          setEditEventModal={setEditEventModal}
+          eventToUpdate={event}
+          setErrorModal={setErrorModal}
+          setError={setError}
+          refresh={refresh}
+        />
+      </div>
+
       <div>
         <Table>
           <thead>

@@ -35,7 +35,7 @@ const Login = () => {
       });
       authContext.setAuthState(user);
       resetForm();
-      router.push('/');
+      router.push('/profile');
     } catch (error) {
       setError({ title: 'Error Login', message: error.message });
       resetForm();
@@ -51,6 +51,52 @@ const Login = () => {
         <div>
           <h6>{error.title}</h6>
           <p>{error.message}</p>
+        </div>
+        <div>
+          <div className="container border-bottom">
+            <Form onSubmit={handleSubmit}>
+              <FormGroup>
+                <Label for="username">Username</Label>
+                <Input
+                  id="username"
+                  name="username"
+                  placeholder="jon@email.com"
+                  type="email"
+                  onChange={(event) => setUsername(event.target.value)}
+                  required
+                />
+              </FormGroup>
+              <FormGroup>
+                <Label for="password">Password</Label>
+                <Input
+                  id="password"
+                  name="password"
+                  placeholder="password"
+                  type="password"
+                  onChange={(event) => setPassword(event.target.value)}
+                  required
+                />
+              </FormGroup>
+              <FormGroup>
+                {isSubmitting ? (
+                  <Button disabled>
+                    <Spinner type="border" size="sm" />
+                    Submitting...
+                  </Button>
+                ) : (
+                  <Button type="submit" color="success">
+                    Login
+                  </Button>
+                )}
+              </FormGroup>
+            </Form>
+          </div>
+        </div>
+        <div className="container" style={{ textAlign: 'center' }}>
+          <p style={{ display: 'inline' }}>New to City Centre?</p>
+          <Link href="/register" style={{ display: 'inline' }}>
+            Register
+          </Link>
         </div>
       </Layout>
     );

@@ -72,6 +72,10 @@ const Home = () => {
           </div>
         </div>
       </div>
+      <div className="container">
+        <h4>Welcome to City Centre!</h4>
+        <p>Create and join events with ease. Stay tuned for more updates!</p>
+      </div>
     </Layout>
   );
 };

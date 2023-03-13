@@ -58,6 +58,81 @@ const Register = () => {
           <h6>{error.title}</h6>
           <p>{error.message}</p>
         </div>
+        <div className="container border-bottom">
+          <Form onSubmit={handleSubmit}>
+            <FormGroup>
+              <Label for="username">Username</Label>
+              <Input
+                id="username"
+                name="username"
+                placeholder="jon@email.com"
+                type="email"
+                onChange={(event) => setUsername(event.target.value)}
+                required
+              />
+            </FormGroup>
+            <FormGroup>
+              <Label for="password">Password</Label>
+              <Input
+                id="password"
+                name="password"
+                placeholder="password"
+                type="password"
+                onChange={(event) => setPassword(event.target.value)}
+                required
+              />
+            </FormGroup>
+            <FormGroup>
+              <Label for="firstName">First Name</Label>
+              <Input
+                id="firstName"
+                name="firstName"
+                placeholder="Jon"
+                type="text"
+                onChange={(event) => setFirstName(event.target.value)}
+                required
+              />
+            </FormGroup>
+            <FormGroup>
+              <Label for="lastName">Last Name</Label>
+              <Input
+                id="lastName"
+                name="lastName"
+                placeholder="Doe"
+                type="text"
+                onChange={(event) => setLastName(event.target.value)}
+                required
+              />
+            </FormGroup>
+            <FormGroup check inline>
+              <Input
+                name="isAgreed"
+                type="checkbox"
+                checked={isAgreed}
+                onChange={() => setIsAgreed(!isAgreed)}
+              />
+              <Label for="isAgreed">Agree to our Terms and Conditions</Label>
+            </FormGroup>
+            <FormGroup>
+              {isSubmitting ? (
+                <Button disabled>
+                  <Spinner type="border" size="sm" />
+                  Submitting...
+                </Button>
+              ) : (
+                <Button type="submit" color="success" disabled={!isAgreed}>
+                  Submit
+                </Button>
+              )}
+            </FormGroup>
+          </Form>
+        </div>
+        <div className="container" style={{ textAlign: 'center' }}>
+          <p style={{ display: 'inline' }}>Already on City Centre?</p>
+          <Link href="/login" style={{ display: 'inline' }}>
+            Login
+          </Link>
+        </div>
       </Layout>
     );
 
