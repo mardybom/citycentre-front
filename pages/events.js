@@ -6,6 +6,8 @@ import { listEvents } from '../lib/events';
 import Layout from '../components/layout';
 import Date from '../components/date';
 import { AuthContext } from '../context/auth-context';
+import CreateEventModal from '../components/events/createEventModal';
+import ErrorModal from '../components/errorModal';
 
 const Events = () => {
   // check authenticated user
@@ -16,8 +18,11 @@ const Events = () => {
   const [events, setEvents] = useState();
   const [isLoading, setIsLoading] = useState(true);
 
+  const [createModal, setCreateModal] = useState(false);
+
   // error
   const [error, setError] = useState();
+  const [errorModal, setErrorModal] = useState(false);
 
   const refresh = async () => {
     setIsLoading(true);
@@ -88,8 +93,12 @@ const Events = () => {
           </Breadcrumb>
         </div>
         <div>
-          <h6>{error.title}</h6>
-          <p>{error.message}</p>
+          <ErrorModal
+            error={error}
+            errorModal={errorModal}
+            setErrorModal={setErrorModal}
+            refresh={refresh}
+          />
         </div>
       </Layout>
     );
@@ -100,7 +109,7 @@ const Events = () => {
         <h1 className="h2">Events</h1>
         <div className="btn-toolbar mb-2 mb-md-0">
           <div className="btn-group me-2">
-            <Button outline size="sm">
+            <Button outline size="sm" onClick={() => setCreateModal(true)}>
               Create
             </Button>
             <Button outline size="sm" onClick={refresh}>
@@ -115,6 +124,15 @@ const Events = () => {
             Events
           </BreadcrumbItem>
         </Breadcrumb>
+      </div>
+      <div>
+        <CreateEventModal
+          createModal={createModal}
+          setCreateModal={setCreateModal}
+          setErrorModal={setErrorModal}
+          setError={setError}
+          refresh={refresh}
+        />
       </div>
       <div
         className="table-responsive"

@@ -1,12 +1,15 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { Breadcrumb, BreadcrumbItem, Button, Spinner, Table } from 'reactstrap';
 import Layout from '../../components/layout';
 import Date from '../../components/date';
-import { getEvent } from '../../lib/events';
+import { getEvent, joinEvent } from '../../lib/events';
+import { AuthContext } from '../../context/auth-context';
 
 const Event = () => {
+  const authContext = useContext(AuthContext);
+
   // route
   const router = useRouter();
   const { id } = router.query;
@@ -35,7 +38,9 @@ const Event = () => {
   };
 
   useEffect(async () => {
-    await refresh(id);
+    authContext.isUserAuthenticated()
+      ? await refresh(id)
+      : router.push('/login');
   }, [id]);
 
   if (isLoading || !event)
@@ -158,8 +163,27 @@ const Event = () => {
                 <Date dateString={event.endDate} />
               </td>
             </tr>
+            <tr>
+              <th scope="row">Participants</th>
+              <td>
+                {event.members.map(({ userId, firstName, lastName }) => (
+                  <tr key={userId}>{`${firstName} ${lastName}`}</tr>
+                ))}
+              </td>
+            </tr>
           </tbody>
         </Table>
+      </div>
+      <div>
+        <Button
+          color="success"
+          onClick={async () => {
+            await joinEvent(id);
+            refresh(id);
+          }}
+        >
+          Join
+        </Button>
       </div>
     </Layout>
   );
