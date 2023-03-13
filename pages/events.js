@@ -1,11 +1,18 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { Breadcrumb, BreadcrumbItem, Button, Spinner, Table } from 'reactstrap';
 import { listEvents } from '../lib/events';
 import Layout from '../components/layout';
 import Date from '../components/date';
+import { AuthContext } from '../context/auth-context';
 
 const Events = () => {
+  // check authenticated user
+  const router = useRouter();
+  const authContext = useContext(AuthContext);
+
+  // events
   const [events, setEvents] = useState();
   const [isLoading, setIsLoading] = useState(true);
 
@@ -25,7 +32,7 @@ const Events = () => {
   };
 
   useEffect(async () => {
-    await refresh();
+    authContext.isUserAuthenticated() ? await refresh() : router.push('/login');
   }, []);
 
   if (isLoading)

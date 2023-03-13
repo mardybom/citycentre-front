@@ -47,7 +47,7 @@ const Layout = ({ children }) => {
           <div className="navbar-nav">
             <div className="nav-item text-nowrap">
               <Link href="/register">
-                <a className="nav-link px-3">Join Now</a>
+                <a className="nav-link px-3">Register</a>
               </Link>
             </div>
           </div>
