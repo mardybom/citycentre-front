@@ -93,6 +93,18 @@ const Layout = ({ children }) => {
                     </Link>
                   </li>
                   <li className="nav-item">
+                    <Link href="/profile">
+                      <a
+                        className={`nav-link ${
+                          router.pathname == '/profile' ? 'active' : ''
+                        }`}
+                      >
+                        <span data-feather="user"></span>
+                        Profile
+                      </a>
+                    </Link>
+                  </li>
+                  <li className="nav-item">
                     <Link href="/logout">
                       <a
                         className={`nav-link ${
